@@ -7,20 +7,27 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --cararra: #f0efe8;
+  --bianca: #fcfaf4;
 }
 
-
+html {
+  width: 100%;
+}
 
 body {
+  width: 100%;
   margin: 0;
+  padding: 1.5rem 20px;
+
+  @media screen and (min-width: 768px) {
+    padding: 0;
+  }
 }
 

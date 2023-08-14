@@ -1,11 +1,15 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import { type BooksResponse, type Library, type LibraryMapped } from './models/books.interface.ts'
-import { IconOpenBook } from './components/icons.tsx'
+import {IconClose, IconOpenBook} from './components/icons.tsx'
 import readingAppLogo from './assets/images/reading-app-logo.png'
 
 function App () {
   const [books, setBooks] = useState<LibraryMapped[]>([])
+  const [isOpenReadingList, setOpenReadingList] = useState<boolean>(false)
+
+  const toggleReadingListClassName = isOpenReadingList ? 'open' : 'close'
+
   const getBooks = () => {
     fetch('./data/books.json')
       .then(async response => await (await response.json() as Promise<BooksResponse>))
@@ -34,37 +38,56 @@ function App () {
     }))
   }
 
+  const handleToggleReadingList = () => {
+    setOpenReadingList((prevState) => !prevState)
+  }
+
   useEffect(() => {
     getBooks()
   }, [])
 
   return (
     <>
-      <main>
-        <header>
-          <div className="logo">
-            <img src={readingAppLogo} alt="open book for logo app" />
-            <div className="name">
-              <span>reading list</span>
-              <IconOpenBook/>
+      <main className='book-list'>
+        <section className='available-book__section'>
+          <header className='header'>
+            <div className="logo">
+              <img src={readingAppLogo} alt="open book for logo app" />
+              <button onClick={handleToggleReadingList} className="toggle-reading-list">
+                <span>reading list</span>
+                <IconOpenBook/>
+              </button>
+            </div>
+            <input className='search-box' type='text' placeholder='🔎 George martin, Ice and fire, ...' />
+          </header>
+          <div className="card-book-list">
+            {
+              books.map(({ book }) => (
+                <article className='card-book' key={book.isbn}>
+                  <img src={book.cover} alt={`${book.title} book`} />
+                  <div className='card-book__info'>
+                    <h2>{book.title}</h2>
+                    <button>Add</button>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+        <section className={`reading-list ${toggleReadingListClassName}`}>
+          <div className="reading-list__section">
+            <div className='reading-list__header'>
+              <button onClick={handleToggleReadingList}>
+                <IconClose/>
+              </button>
+            </div>
+            <div className='reading-list__title'>
+              <h2>Reading List</h2>
+              <p>Don’t let the story end just yet. Continue reading your last book.
+                And immerse yourself in the world of literature.</p>
             </div>
           </div>
-          <input type='text' placeholder='Search a book' />
-        </header>
-        <section className='card-book-list'>
-          {
-            books.map(({ book }) => (
-              <article className='card-book' key={book.isbn}>
-                <img src={book.cover} alt={`${book.title} book`} />
-                <div className='card-book__info'>
-                  <h2>{book.title}</h2>
-                  <button>Add</button>
-                </div>
-              </article>
-            ))
-          }
         </section>
-        <section></section>
       </main>
     </>
   )
