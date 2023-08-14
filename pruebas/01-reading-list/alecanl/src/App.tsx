@@ -1,33 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useEffect, useState } from 'react'
+import { type BooksResponse, type Library, type LibraryMapped } from './models/books.interface.ts'
+import { IconOpenBook } from './components/icons.tsx'
+import readingAppLogo from './assets/images/reading-app-logo.png'
 
-function App() {
-  const [count, setCount] = useState(0)
+function App () {
+  const [books, setBooks] = useState<LibraryMapped[]>([])
+  const getBooks = () => {
+    fetch('./data/books.json')
+      .then(async response => await (await response.json() as Promise<BooksResponse>))
+      .then(data => {
+        setBooks(mappedBooks(data.library))
+      })
+      .catch(error => { console.log(error) })
+  }
+
+  const mappedBooks = (books: Library[]) => {
+    return books.map(({ book }) => ({
+      book: {
+        title: book.title,
+        pages: book.pages,
+        genre: book.genre,
+        cover: book.cover,
+        synopsis: book.synopsis,
+        year: book.year,
+        isbn: book.ISBN,
+        author: {
+          name: book.author.name,
+          otherBooks: book.author.otherBooks
+        }
+
+      }
+    }))
+  }
+
+  useEffect(() => {
+    getBooks()
+  }, [])
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <main>
+        <header>
+          <div className="logo">
+            <img src={readingAppLogo} alt="open book for logo app" />
+            <div className="name">
+              <span>reading list</span>
+              <IconOpenBook/>
+            </div>
+          </div>
+          <input type='text' placeholder='Search a book' />
+        </header>
+        <section className='card-book-list'>
+          {
+            books.map(({ book }) => (
+              <article className='card-book' key={book.isbn}>
+                <img src={book.cover} alt={`${book.title} book`} />
+                <div className='card-book__info'>
+                  <h2>{book.title}</h2>
+                  <button>Add</button>
+                </div>
+              </article>
+            ))
+          }
+        </section>
+        <section></section>
+      </main>
     </>
   )
 }
