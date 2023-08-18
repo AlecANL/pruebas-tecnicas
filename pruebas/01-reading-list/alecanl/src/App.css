@@ -129,7 +129,7 @@
   overflow: auto;
 }
 
-.categories span {
+.categories button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,12 +138,12 @@
   border: 1px solid transparent;
 }
 
-.categories span.active {
+.categories button.active {
   background-color: var(--just-pink);
   color: var(--bianca);
 }
 
-.categories span:not(.active) {
+.categories button:not(.active) {
   border-color: var(--just-pink);
   color: var(--just-pink);
 }

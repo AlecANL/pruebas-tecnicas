@@ -1,50 +1,25 @@
 import './App.css'
-import { useEffect, useState } from 'react'
-import { type BooksResponse, type Library, type LibraryMapped } from './models/books.interface.ts'
-import {IconAdd, IconClose, IconOpenBook} from './components/icons.tsx'
+import { useState } from 'react'
+import { IconClose, IconOpenBook } from './components/icons.tsx'
 import readingAppLogo from './assets/images/reading-app-logo.png'
+import { useBooks } from './hooks/useBooks.ts'
+import { useFilter } from './hooks/useFilter.ts'
+import { GenderFilter } from './components/gender-filter.tsx'
+import { ReadingList } from './components/reading-list.tsx'
+import { useBooksContext } from './hooks/useBooksContext.ts'
+import { BookList } from './components/book-list.tsx'
 
 function App () {
-  const [books, setBooks] = useState<LibraryMapped[]>([])
+  useBooks()
+  const { books, handleChangeFilterValue, handleChangeFilter, availableBooks } = useFilter()
+  const { readingBooks } = useBooksContext()
   const [isOpenReadingList, setOpenReadingList] = useState<boolean>(false)
 
   const toggleReadingListClassName = isOpenReadingList ? 'open' : 'close'
 
-  const getBooks = () => {
-    fetch('./data/books.json')
-      .then(async response => await (await response.json() as Promise<BooksResponse>))
-      .then(data => {
-        setBooks(mappedBooks(data.library))
-      })
-      .catch(error => { console.log(error) })
-  }
-
-  const mappedBooks = (books: Library[]) => {
-    return books.map(({ book }) => ({
-      book: {
-        title: book.title,
-        pages: book.pages,
-        genre: book.genre,
-        cover: book.cover,
-        synopsis: book.synopsis,
-        year: book.year,
-        isbn: book.ISBN,
-        author: {
-          name: book.author.name,
-          otherBooks: book.author.otherBooks
-        }
-
-      }
-    }))
-  }
-
   const handleToggleReadingList = () => {
     setOpenReadingList((prevState) => !prevState)
   }
-
-  useEffect(() => {
-    getBooks()
-  }, [])
 
   return (
     <>
@@ -65,30 +40,12 @@ function App () {
               <h2>Happy Reading</h2>
               <p>Welcome to our reading library! Dive into a world of possibilities and choose your next book to enjoy - adventure awaits on every page!</p>
             </div>
-            <div className='categories'>
-              <span className='active'>All</span>
-              <span>All</span>
-              <span>All</span>
-              <span>All</span>
-            </div>
-            <p className='text-grey'>There are <span className='badge'>10</span> books available.</p>
+            <GenderFilter books={books} handleChangeFilterValue={handleChangeFilterValue} handleChangeFilter={handleChangeFilter} />
+            <p className='text-grey'>There are <span className='badge'>
+              {availableBooks}
+            </span> books available.</p>
           </div>
-          <div className="card-book-list">
-            {
-              books.map(({ book }) => (
-                <article className='card-book' key={book.isbn}>
-                  <img src={book.cover} alt={`${book.title} book`} />
-                  <div className='card-book__info'>
-                    <h3>{book.title}</h3>
-                    <button className='btn btn-primary'>
-                      <span>Add</span>
-                      <IconAdd/>
-                    </button>
-                  </div>
-                </article>
-              ))
-            }
-          </div>
+          <BookList books={books}/>
         </section>
         <section className={`reading-list ${toggleReadingListClassName}`}>
           <div className="reading-list__section">
@@ -103,22 +60,7 @@ function App () {
                 And immerse yourself in the world of literature.</p>
             </div>
           </div>
-          <div className="card-book-list">
-            {
-              books.map(({ book }) => (
-                <article className='card-book' key={book.isbn}>
-                  <img src={book.cover} alt={`${book.title} book`} />
-                  <div className='card-book__info'>
-                    <h3>{book.title}</h3>
-                    <button className='btn btn-primary'>
-                      <span>Add</span>
-                      <IconAdd/>
-                    </button>
-                  </div>
-                </article>
-              ))
-            }
-          </div>
+          <ReadingList books={readingBooks}/>
         </section>
       </main>
     </>

@@ -32,6 +32,8 @@ export interface BookMapped {
   author: Author
 }
 
+export type bookId = Pick<BookMapped, 'isbn'>
+
 export interface Author {
   name: string
   otherBooks: string[]
