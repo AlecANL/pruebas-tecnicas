@@ -2,17 +2,13 @@ import './App.css'
 import { useState } from 'react'
 import { IconClose, IconOpenBook } from './components/icons.tsx'
 import readingAppLogo from './assets/images/reading-app-logo.png'
-import { useBooks } from './hooks/useBooks.ts'
-import { useFilter } from './hooks/useFilter.ts'
 import { GenderFilter } from './components/gender-filter.tsx'
-import { ReadingList } from './components/reading-list.tsx'
-import { useBooksContext } from './hooks/useBooksContext.ts'
 import { BookList } from './components/book-list.tsx'
+import { useSomething } from './hooks/useSomething.ts'
+import { ReadingList } from './components/reading-list.tsx'
 
 function App () {
-  useBooks()
-  const { books, handleChangeFilterValue, handleChangeFilter, availableBooks } = useFilter()
-  const { readingBooks } = useBooksContext()
+  const { books, handleChangeFilter, handleChangeFilterValue, availableBooks } = useSomething()
   const [isOpenReadingList, setOpenReadingList] = useState<boolean>(false)
 
   const toggleReadingListClassName = isOpenReadingList ? 'open' : 'close'
@@ -60,7 +56,7 @@ function App () {
                 And immerse yourself in the world of literature.</p>
             </div>
           </div>
-          <ReadingList books={readingBooks}/>
+           <ReadingList />
         </section>
       </main>
     </>

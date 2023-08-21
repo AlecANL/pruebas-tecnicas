@@ -16,9 +16,9 @@ export function GenderFilter (props: IGenderFilterProps) {
   const genders = getGenderFilters(availableBooks)
 
   const changeGender = (gender: string) => {
-    setActiveGender(gender)
     handleChangeFilterValue(gender)
-    handleChangeFilter(activeGender === 'all' ? 'all' : 'gender')
+    handleChangeFilter(gender === 'all' ? 'all' : 'gender')
+    setActiveGender(gender)
   }
 
   const activeClassName = (gender: string) => gender === activeGender ? 'active' : ''

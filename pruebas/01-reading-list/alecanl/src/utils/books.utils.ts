@@ -10,9 +10,13 @@ export function addBook (state: IBooksState, currentBook: LibraryMapped) {
     books: newBooks,
     readingBooks: [
       ...state.readingBooks,
-      currentBook
+      {
+        ...currentBook,
+        isInReadingList: !currentBook.isInReadingList
+      }
     ]
   } satisfies IBooksState
+
   updateLocalStorage(newState)
 
   return newState
@@ -24,7 +28,7 @@ export function removeBook (state: IBooksState, idBook: string) {
 
   const newState = {
     ...state,
-    books: [...state.books, bookToDelete],
+    books: [...state.books, { ...bookToDelete, isInReadingList: !bookToDelete.isInReadingList }],
     readingBooks: newReadingBooks
   } satisfies IBooksState
 
@@ -36,6 +40,16 @@ export function filledBooks (state: IBooksState, books: LibraryMapped[]) {
   const newState = {
     ...state,
     books
+  } satisfies IBooksState
+
+  updateLocalStorage(newState)
+  return newState
+}
+
+export function filledReadingBook (state: IBooksState, books: LibraryMapped[]) {
+  const newState = {
+    ...state,
+    readingBooks: books
   } satisfies IBooksState
 
   updateLocalStorage(newState)
@@ -56,7 +70,7 @@ export const mappedBooks = (books: Library[]) => {
         name: book.author.name,
         otherBooks: book.author.otherBooks
       }
-
-    }
+    },
+    isInReadingList: false
   }))
 }

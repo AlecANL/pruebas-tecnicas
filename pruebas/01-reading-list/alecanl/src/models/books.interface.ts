@@ -19,6 +19,7 @@ export interface Book {
 
 export interface LibraryMapped {
   book: BookMapped
+  isInReadingList: boolean
 }
 
 export interface BookMapped {

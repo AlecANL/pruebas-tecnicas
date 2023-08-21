@@ -1,6 +1,5 @@
 import { type LibraryMapped } from '../models/books.interface.ts'
-import { IconAdd } from './icons.tsx'
-import { useBooksContext } from '../hooks/useBooksContext.ts'
+import { BookItem } from './book-item.tsx'
 
 export interface IBookListProps {
   books: LibraryMapped[]
@@ -8,7 +7,6 @@ export interface IBookListProps {
 
 export function BookList (props: IBookListProps) {
   const { books } = props
-  const { addBookToReadingList } = useBooksContext()
 
   const isBooksEmpty = books.length === 0
 
@@ -17,19 +15,9 @@ export function BookList (props: IBookListProps) {
       <div className="card-book-list">
         {
           !isBooksEmpty && books.map((book) => (
-            <article className='card-book' key={book.book.isbn}>
-              <img src={book.book.cover} alt={`${book.book.title} book`} />
-              <div className='card-book__info'>
-                <h3>{book.book.title}</h3>
-                <button onClick={() => { addBookToReadingList(book) }} className='btn btn-primary'>
-                  <span>Add</span>
-                  <IconAdd/>
-                </button>
-              </div>
-            </article>
+            <BookItem currentBook={book} key={book.book.isbn} />
           ))
         }
-
         {
           isBooksEmpty && (
             <div>

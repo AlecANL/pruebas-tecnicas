@@ -6,15 +6,15 @@ import { type IBookContextState } from '../models/books.state.interface.ts'
 export const BooksContext = createContext<IBookContextState | null>(null)
 
 export function BooksProvider ({ children }: IBooksProviderProps) {
-  const { currentState, removeBookFromReadingList, addBookToReadingList, filledBooks } = useBooksReducer()
+  const { currentState, removeBookFromReadingList, addBookToReadingList, filledBooks, filledReadingBooks } = useBooksReducer()
 
   const value: IBookContextState = {
     books: currentState.books,
-    availableBooks: currentState.availableBooks,
     readingBooks: currentState.readingBooks,
     addBookToReadingList,
     removeBookFromReadingList,
-    filledBooks
+    filledBooks,
+    filledReadingBooks
   }
 
   return (

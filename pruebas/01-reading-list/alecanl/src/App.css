@@ -3,6 +3,10 @@
   margin: 0 auto;
 }
 
+.book-list {
+  flex: 1;
+}
+
 .card-book-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 210px));

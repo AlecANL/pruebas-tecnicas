@@ -1,6 +1,6 @@
 import { type IBooksState } from '../models/books.state.interface.ts'
 import { type BOOKS_ACTIONS, BOOKS_REDUCER_ACTIOS } from '../const/books.const.ts'
-import { addBook, filledBooks, removeBook } from '../utils/books.utils.ts'
+import { addBook, filledBooks, filledReadingBook, removeBook } from '../utils/books.utils.ts'
 import { type LibraryMapped } from '../models/books.interface.ts'
 
 export function booksReducer (initialState: IBooksState, action: BOOKS_ACTIONS): IBooksState {
@@ -16,6 +16,10 @@ export function booksReducer (initialState: IBooksState, action: BOOKS_ACTIONS):
 
   if (type === BOOKS_REDUCER_ACTIOS.FILLED_BOOKS) {
     return filledBooks(initialState, action.payload as LibraryMapped[])
+  }
+
+  if (type === BOOKS_REDUCER_ACTIOS.FILLED_READING_BOOKS) {
+    return filledReadingBook(initialState, action.payload as LibraryMapped[])
   }
 
   return initialState
