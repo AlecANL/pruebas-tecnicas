@@ -222,3 +222,36 @@
     margin-top: 35px;
   }
 }
+
+.card-book-list__empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-book-list__empty img {
+  max-width: 100%;
+}
+
+.books-list_empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.book-list__empty img {
+  width: 200px;
+  height: 200px;
+}
+
+.books-list_empty p {
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .books-list_empty {
+    margin-top: 5rem;
+  }
+}

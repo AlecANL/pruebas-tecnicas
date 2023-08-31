@@ -1,6 +1,7 @@
 import { type Library, type LibraryMapped } from '../models/books.interface.ts'
 import { type IBooksState } from '../models/books.state.interface.ts'
-import { updateLocalStorage } from './books.storage.ts'
+import {getBookFromStorage, updateLocalStorage} from './books.storage.ts'
+import {STATE_STORAGE_KEYS} from "../const/books.const.ts";
 
 export function addBook (state: IBooksState, currentBook: LibraryMapped) {
   const newBooks = state.books.filter(({ book }) => book.isbn !== currentBook.book.isbn)
@@ -42,8 +43,7 @@ export function filledBooks (state: IBooksState, books: LibraryMapped[]) {
     books
   } satisfies IBooksState
 
-  updateLocalStorage(newState)
-  return newState
+  return getBookFromStorage(newState, STATE_STORAGE_KEYS.READING_BOOKS_APP)
 }
 
 export function filledReadingBook (state: IBooksState, books: LibraryMapped[]) {
@@ -52,8 +52,7 @@ export function filledReadingBook (state: IBooksState, books: LibraryMapped[]) {
     readingBooks: books
   } satisfies IBooksState
 
-  updateLocalStorage(newState)
-  return newState
+  return getBookFromStorage(newState, STATE_STORAGE_KEYS.READING_BOOKS_APP)
 }
 
 export const mappedBooks = (books: Library[]) => {
